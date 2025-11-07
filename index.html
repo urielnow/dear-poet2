@@ -141,16 +141,78 @@
             100% { transform: scale(1); }
         }
 
-        .input-field {
-            padding: 15px;
-            font-size: 1.2em;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            margin: 20px 0;
+        /* Divorce Paper Styles */
+        .divorce-paper {
+            background: #fefefe;
+            color: #333;
+            padding: 30px;
+            border: 2px solid #8B0000;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            text-align: left;
+            max-width: 450px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .paper-header {
+            text-align: center;
+            border-bottom: 2px solid #8B0000;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .paper-header h2 {
+            color: #8B0000;
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        .parties {
+            margin: 25px 0;
+        }
+
+        .party {
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(139, 0, 0, 0.05);
+            border-radius: 5px;
+        }
+
+        .party-label {
+            font-weight: bold;
+            color: #8B0000;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .name-input {
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 1em;
             width: 200px;
             text-align: center;
-            background: white;
-            color: #333;
+            margin-top: 5px;
+        }
+
+        .name-input:focus {
+            outline: none;
+            border-color: #8B0000;
+        }
+
+        .signature-line {
+            border-top: 1px solid #333;
+            margin-top: 30px;
+            padding-top: 10px;
+            text-align: center;
+        }
+
+        .error-message {
+            color: #ff4757;
+            font-size: 1.1em;
+            margin: 10px 0;
+            text-align: center;
         }
 
         .final-message {
@@ -180,6 +242,11 @@
                 padding: 15px 25px;
                 font-size: 1.1em;
                 min-width: 120px;
+            }
+            
+            .divorce-paper {
+                padding: 20px;
+                margin: 10px;
             }
         }
     </style>
@@ -234,11 +301,34 @@
 
         <!-- Phase 6: Divorce Form -->
         <div id="divorceFormPhase" class="hidden">
-            <h1>DIVORCE FORM</h1>
-            <p class="message">Type your name to confirm.</p>
-            <input type="text" id="nameInput" class="input-field" placeholder="Type here...">
+            <div class="divorce-paper">
+                <div class="paper-header">
+                    <h2>DIVORCE AGREEMENT</h2>
+                </div>
+                
+                <div class="parties">
+                    <div class="party">
+                        <span class="party-label">Party A (Plaintiff):</span>
+                        <span>Sama</span>
+                    </div>
+                    <div class="party">
+                        <span class="party-label">Party B (Defendant):</span>
+                        <div>
+                            <input type="text" id="nameInput" class="name-input" placeholder="Type full name">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="signature-line">
+                    <p><strong>Signature of Party B:</strong></p>
+                    <div id="errorMessage" class="error-message hidden">
+                        Please type "Lavi" or "Angelina" to confirm
+                    </div>
+                </div>
+            </div>
+            
             <div class="buttons">
-                <button onclick="confirmDivorce()">Confirm</button>
+                <button onclick="confirmDivorce()">Sign & Finalize Divorce</button>
             </div>
         </div>
 
@@ -354,7 +444,11 @@
 
         function confirmDivorce() {
             const nameInput = document.getElementById('nameInput').value.trim().toLowerCase();
-            if (nameInput === 'lavi') {
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Only accept "Lavi" or "Angelina"
+            if (nameInput === 'lavi' || nameInput === 'angelina') {
+                errorMessage.classList.add('hidden');
                 document.getElementById('divorceFormPhase').classList.add('hidden');
                 document.getElementById('divorceFinalPhase').classList.remove('hidden');
                 
@@ -364,7 +458,7 @@
                 
                 document.body.style.background = 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)';
             } else {
-                alert('Please type "Lavi" to confirm.');
+                errorMessage.classList.remove('hidden');
             }
         }
     </script>
